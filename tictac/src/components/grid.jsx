@@ -11,44 +11,38 @@ const Grid = (props) => {
 
   const winCheck = () => {
     // Check for a winning row, column, or diagonal of 3 for x or o
-    if (grid[0] === grid[1] && grid[1] === grid[2] && grid[0] !== "") {
-      return true;
-    } else if (grid[3] === grid[4] && grid[4] === grid[5] && grid[3] !== "") {
-      return true;
-    } else if (grid[6] === grid[7] && grid[7] === grid[8] && grid[6] !== "") {
-      return true;
-    } else if (grid[0] === grid[3] && grid[3] === grid[6] && grid[0] !== "") {
-      return true;
-    } else if (grid[1] === grid[4] && grid[4] === grid[7] && grid[1] !== "") {
-      return true;
-    } else if (grid[2] === grid[5] && grid[5] === grid[8] && grid[2] !== "") {
-      return true;
-    } else if (grid[0] === grid[4] && grid[4] === grid[8] && grid[0] !== "") {
-      return true;
-    } else if (grid[2] === grid[4] && grid[4] === grid[6] && grid[2] !== "") {
-      return true;
-    } else {
-      return false;
+    const winningConditions = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6],
+    ];
+
+    for (let condition of winningConditions) {
+      let [a, b, c] = condition;
+      if (grid[a] && grid[a] === grid[b] && grid[a] === grid[c]) {
+        return true;
+      }
     }
+
+    return false;
   };
 
   const handleClick = (index) => {
-    if (win) {
-      return;
-    } else if (grid[index] !== "") {
+    if (win || grid[index] !== "") {
       return;
     }
     // Update the grid state when a cell is clicked
     const updatedGrid = [...grid];
-    // console.log(isNext.length);
     const nextMove = isNext[isNext.length - 1] === 1 ? ["O", 0] : ["X", 1];
     updatedGrid[index] = nextMove[0];
     setGrid(updatedGrid);
     const newMove = [...isNext];
-    // console.log(nextMove);
     newMove.push(nextMove[1]);
-    // console.log(newMove);
-    // console.log(newMove);
     setIsNext(newMove);
   };
 
@@ -66,7 +60,6 @@ const Grid = (props) => {
       setTimeout(() => setGrid(initialGrid), 1000);
     }
   }, [grid]);
-  //   console.log(isNext);
 
   const cellStyle = () => {
     if (win) {
